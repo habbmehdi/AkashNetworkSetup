@@ -1,0 +1,46 @@
+version: "2.0"
+
+services:
+  web:
+    image: moonbys/moonubu:super1
+    env:
+      - sshport=22000
+      - pubkey=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDjQS2X6Bt58d+1OpzszzkYt5mmZMCERXGniHxpXYVnXTnKSKlV3loJUERQa4znOrgs5pRlZw4Qn0wAUBpg4hGR5NLp07yVr1BzhP9lnf02owSS4fEs61xh4UXqVAwkueDeId+lvDvoox/++NbhMFcvOH6CAqbtLrdVY1cuO4mczUs1EMGoP9VqLS7twlBj9CAYbAI7UNs6SLSyy5wcpn1jsvO8qw5goqPwPC90maygnNgl73Fs/e24XsqCdSaDK/jlr+8AExl/xn8FZ7qckq7sdGqURJy475cDiEt6sixx13m7kkkQK1ll8qQiubtaYHmxr2D84lXtfhUZPt4+4Kiq4l8ffi4a7oxCr3qLmCQS9e8lbk2elCZU8CBlnSildwHDer2xvjzrGGIusVdnwKYqKwXXCCgJb9MROrTef33Yo3kVr9qn+mISfgL2Z873FByJz3eRgJ+7j2fSmJbDDw3D6neI84e9DW2itgxACMtMPYrH7ojDCw8Q/EAaX1pI8OU= habbm@DESKTOP-C3L5U9H
+
+    expose:
+      - port: 22000
+        as: 22000
+        to:
+          - global: true
+      - port: 9001
+        as: 9001
+        to:
+          - global: true
+      - port: 9005
+        as: 9005
+        to:
+          - global: true
+
+profiles:
+  compute:
+    web:
+      resources:
+        cpu:
+          units: 2
+        memory:
+          size: 4Gi
+        storage:
+          size: 10Gi
+  placement:
+    dcloud:
+      pricing:
+        # The name of the service
+        web:
+          denom: uakt
+          amount: 1000
+
+deployment:
+  web:
+    dcloud:
+      profile: web
+      count: 1
